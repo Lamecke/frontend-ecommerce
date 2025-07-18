@@ -1,30 +1,49 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCart, removeFromCart, updateCartPrices } from '../store/slices/cartSlice';
+import {
+  addToCart,
+  removeFromCart,
+  updateCartPrices,
+} from '../store/slices/cartSlice';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 import { Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import type { AppDispatch, RootState } from '@/store/store';
+import type { CartItem } from '@/types';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const { cartItems, itemsPrice, shippingPrice, taxPrice, totalPrice } = useSelector((state) => state.cart);
-  const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems, itemsPrice, shippingPrice, taxPrice, totalPrice } = useSelector(
+    (state: RootState) => state.cart
+  );
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     dispatch(updateCartPrices());
   }, [cartItems, dispatch]);
 
-  const addToCartHandler = (product, qty) => {
+  const addToCartHandler = (product: CartItem, qty: number) => {
     dispatch(addToCart({ ...product, qty }));
   };
 
-  const removeFromCartHandler = (id) => {
+  const removeFromCartHandler = (id: string) => {
     dispatch(removeFromCart(id));
   };
 
@@ -71,7 +90,7 @@ const CartPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
-          {cartItems.map((item) => (
+          {cartItems.map((item: CartItem) => (
             <Card key={item.product}>
               <CardContent className="p-4">
                 <div className="flex items-center space-x-4">
@@ -105,15 +124,17 @@ const CartPage = () => {
                         addToCartHandler(item, Number(value))
                       }
                     >
-                      <SelectTrigger className="w-20">
+                      <SelectTrigger className="w-20" aria-label="Selecionar quantidade">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
-                        {[...Array(Math.min(item.countInStock, 10)).keys()].map((x) => (
-                          <SelectItem key={x + 1} value={(x + 1).toString()}>
-                            {x + 1}
-                          </SelectItem>
-                        ))}
+                        {[...Array(Math.min(item.countInStock, 10)).keys()].map(
+                          (x) => (
+                            <SelectItem key={x + 1} value={(x + 1).toString()}>
+                              {x + 1}
+                            </SelectItem>
+                          )
+                        )}
                       </SelectContent>
                     </Select>
 
@@ -139,14 +160,19 @@ const CartPage = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between">
-                <span>Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)} itens):</span>
+                <span>
+                  Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)}{' '}
+                  itens):
+                </span>
                 <span>R$ {itemsPrice.toFixed(2)}</span>
               </div>
 
               <div className="flex justify-between">
                 <span>Frete:</span>
                 <span>
-                  {shippingPrice === 0 ? 'Grátis' : `R$ ${shippingPrice.toFixed(2)}`}
+                  {shippingPrice === 0
+                    ? 'Grátis'
+                    : `R$ ${shippingPrice.toFixed(2)}`}
                 </span>
               </div>
 
@@ -164,9 +190,7 @@ const CartPage = () => {
 
               {shippingPrice === 0 && (
                 <Alert>
-                  <AlertDescription>
-                    🎉 Você ganhou frete grátis!
-                  </AlertDescription>
+                  <AlertDescription>🎉 Você ganhou frete grátis!</AlertDescription>
                 </Alert>
               )}
 
@@ -190,4 +214,3 @@ const CartPage = () => {
 };
 
 export default CartPage;
-

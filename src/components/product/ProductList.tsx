@@ -5,12 +5,14 @@ import { listProducts } from '../../store/slices/productSlice';
 import ProductCard from './ProductCard';
 import { Loader2 } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import type { RootState, AppDispatch } from '@/store/store';
+import type { Product } from '@/types';
 
 const ProductList = () => {
-  const dispatch = useDispatch();
-  const { keyword } = useParams();
+  const dispatch = useDispatch<AppDispatch>();
+  const { keyword } = useParams<{ keyword?: string }>();
 
-  const { products, loading, error } = useSelector((state) => state.product);
+  const { products, loading, error } = useSelector((state: RootState) => state.product);
 
   useEffect(() => {
     dispatch(listProducts({ keyword: keyword || '', pageNumber: '' }));
@@ -41,8 +43,7 @@ const ProductList = () => {
         <p className="text-gray-500">
           {keyword
             ? `Não encontramos produtos para "${keyword}"`
-            : 'Não há produtos disponíveis no momento'
-          }
+            : 'Não há produtos disponíveis no momento'}
         </p>
       </div>
     );
@@ -62,7 +63,7 @@ const ProductList = () => {
       )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {products.map((product: Product) => (
           <ProductCard key={product._id} product={product} />
         ))}
       </div>
@@ -71,4 +72,3 @@ const ProductList = () => {
 };
 
 export default ProductList;
-
