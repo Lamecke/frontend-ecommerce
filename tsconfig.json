@@ -2,10 +2,22 @@
   "files": [],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "./tsconfig.app.json",
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ]
     },
     {
-      "path": "./tsconfig.node.json"
+      "path": "./tsconfig.node.json",
+      "@store/*": [
+        "src/store/*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ]
     }
   ],
   "compilerOptions": {

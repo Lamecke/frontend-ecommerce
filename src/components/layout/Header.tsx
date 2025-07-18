@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import type { RootState, AppDispatch } from '@/store/store'; // certifique-se que exporta isso
 import { ShoppingCart, User, Search, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,19 +11,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { logout } from '../../store/slices/authSlice';
+import { logout } from '@/store/slices/authSlice'; // use path absoluto
 
 const Header = () => {
-  const [keyword, setKeyword] = useState('');
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [keyword, setKeyword] = useState<string>('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  const { userInfo } = useSelector((state) => state.auth);
-  const { cartItems } = useSelector((state) => state.cart);
+  const { userInfo } = useSelector((state: RootState) => state.auth);
+  const { cartItems } = useSelector((state: RootState) => state.cart);
 
-  const submitHandler = (e) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (keyword.trim()) {
       navigate(`/search/${keyword}`);
@@ -36,7 +37,7 @@ const Header = () => {
     navigate('/');
   };
 
-  const cartItemsCount = cartItems.reduce((acc, item) => acc + item.qty, 0);
+  const cartItemsCount = cartItems.reduce((acc: number, item: { qty: number }) => acc + item.qty, 0);
 
   return (
     <header className="bg-white shadow-sm border-b">

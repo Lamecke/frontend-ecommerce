@@ -3,8 +3,23 @@ import { Star } from 'lucide-react';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
-const ProductCard = ({ product }) => {
-  const renderStars = (rating) => {
+interface Product {
+  _id: string;
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+  countInStock: number;
+  rating: number;
+  numReviews: number;
+}
+
+interface ProductCardProps {
+  product: Product;
+}
+
+const ProductCard = ({ product }: ProductCardProps) => {
+  const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
@@ -42,14 +57,14 @@ const ProductCard = ({ product }) => {
           />
         </div>
       </Link>
-      
+
       <CardContent className="p-4">
         <Link to={`/product/${product._id}`}>
           <h3 className="font-semibold text-lg mb-2 line-clamp-2 hover:text-primary transition-colors">
             {product.name}
           </h3>
         </Link>
-        
+
         <div className="flex items-center mb-2">
           <div className="flex items-center mr-2">
             {renderStars(product.rating)}
@@ -58,16 +73,16 @@ const ProductCard = ({ product }) => {
             ({product.numReviews} avaliações)
           </span>
         </div>
-        
+
         <p className="text-sm text-gray-600 mb-3 line-clamp-2">
           {product.description}
         </p>
-        
+
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold text-primary">
             R$ {product.price.toFixed(2)}
           </span>
-          
+
           {product.countInStock > 0 ? (
             <span className="text-sm text-green-600 font-medium">
               Em estoque
@@ -79,10 +94,10 @@ const ProductCard = ({ product }) => {
           )}
         </div>
       </CardContent>
-      
+
       <CardFooter className="p-4 pt-0">
-        <Button 
-          asChild 
+        <Button
+          asChild
           className="w-full"
           disabled={product.countInStock === 0}
         >
@@ -96,4 +111,3 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
-

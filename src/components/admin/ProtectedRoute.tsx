@@ -1,9 +1,16 @@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
+import { ReactNode } from 'react';
+import { RootState } from '@/store/store';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-const ProtectedRoute = ({ children, adminOnly = false }) => {
-  const { userInfo } = useSelector((state) => state.auth);
+interface ProtectedRouteProps {
+  children: ReactNode;
+  adminOnly?: boolean;
+}
+
+const ProtectedRoute = ({ children, adminOnly = false }: ProtectedRouteProps) => {
+  const { userInfo } = useSelector((state: RootState) => state.auth);
 
   if (!userInfo) {
     return <Navigate to="/login" replace />;
@@ -21,8 +28,7 @@ const ProtectedRoute = ({ children, adminOnly = false }) => {
     );
   }
 
-  return children;
+  return <>{children}</>;
 };
 
 export default ProtectedRoute;
-

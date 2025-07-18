@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 const ProductList = () => {
   const dispatch = useDispatch();
   const { keyword } = useParams();
-  
+
   const { products, loading, error } = useSelector((state) => state.product);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const ProductList = () => {
           Nenhum produto encontrado
         </h2>
         <p className="text-gray-500">
-          {keyword 
+          {keyword
             ? `Não encontramos produtos para "${keyword}"`
             : 'Não há produtos disponíveis no momento'
           }
@@ -60,7 +60,7 @@ const ProductList = () => {
           </p>
         </div>
       )}
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map((product) => (
           <ProductCard key={product._id} product={product} />
